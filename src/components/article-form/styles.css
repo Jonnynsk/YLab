@@ -1,0 +1,23 @@
+.editing {
+    padding: 0 35px;
+}
+
+.editing-submit {
+    margin-top: 30px;
+    width: 100px;
+}
+
+.Textarea {
+    min-height: 120px;
+    min-width: 100%;
+}
+
+.delete-button {
+    display: flex;
+    justify-content: end;
+}
+
+.delete {
+    margin-right: 35px;
+    width: 100px;
+}
