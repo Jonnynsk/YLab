@@ -20,15 +20,34 @@ function ArticleEditing() {
   }, [params.id]);
 
   const select = useSelector(state => ({
-    article: state.article.data,
+    articleTitle: state.article.data,
     waiting: state.article.waiting || state.countries.waiting || state.categories.waiting,
+    article: state.article.formData,
+    error: state.article.error,
+    maidIn: state.countries.data,
+    category: state.categories.data
   }));
 
+const callbacks = {
+    onChangeInput: useCallback((e) => store.article.update(e), [store]),
+    onChangeSelect: useCallback((e, item) => store.article.update(e, item), [store]),
+    onSubmit: useCallback(() => store.article.send(), [store]),
+    onDelete: useCallback(() => store.article.delete(), [store])
+}
+
   return (
-    <Layout head={<h1>{select.article.title}</h1>}>
+    <Layout head={<h1>{select.articleTitle.title}</h1>}>
       <Header />
       <Spinner active={select.waiting}>
-        <ArticleForm />
+        <ArticleForm article={select.article} 
+                     error={select.error}  
+                     maidIn={select.maidIn}  
+                     category={select.category}
+                     onChangeInput={callbacks.onChangeInput}
+                     onChangeSelect={callbacks.onChangeSelect}
+                     onSubmit={callbacks.onSubmit}
+                     onDelete={callbacks.onDelete}
+         />
       </Spinner>
     </Layout>
   );
