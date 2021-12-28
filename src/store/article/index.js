@@ -58,19 +58,22 @@ class ArticleStore extends StoreModule {
         headers: { 'Content-Type': 'application/json' }
       })
       const json = await response.json()
-      if (json.error) throw new Error(json.error.message);
+      if (json.error) {
+        this.updateState({
+          error: json.error.message + ': ' + json.error.data.issues[0].path + ' ' + json.error.data.issues[0].message,
+        });
+        throw new Error(json.error);
+      }
 
       this.updateState({
-        waiting: false
+        waiting: false,
+        error: ''
       })
     } catch (e) {
       this.updateState({
-        data: {},
-        formData: {},
         waiting: false,
-        error: e.message
       });
-    }
+    } 
   }
 
   update(e, item = null) {
@@ -84,6 +87,7 @@ class ArticleStore extends StoreModule {
       })
     }
   }
+
   async delete() {
     this.updateState({
       waiting: true

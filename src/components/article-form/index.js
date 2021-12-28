@@ -16,6 +16,7 @@ function ArticleForm() {
 
     const select = useSelector(state => ({
         article: state.article.formData,
+        error: state.article.error,
         maidIn: state.countries.data,
         category: state.categories.data
     }))
@@ -56,11 +57,12 @@ function ArticleForm() {
                 <LayoutEdit label='Год выпуска'>
                     <Input type='number' name='edition' value={select.article.edition} onChange={callbacks.onChangeInput} placeholder='Год выпуска' />
                 </LayoutEdit>
-                <LayoutEdit label='Цена (₽)'>
+                <LayoutEdit label='Цена (₽)' >
                     <Input type='number' name='price' value={select.article.price} onChange={callbacks.onChangeInput} placeholder='Цена' />
                 </LayoutEdit>
 
                 <input className='editing-submit' type='submit' value='Сохранить' />
+                 <div className='error'>{select.error}</div>
             </form>
             
             <div className='delete-button'>
