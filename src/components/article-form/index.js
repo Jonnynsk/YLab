@@ -6,7 +6,6 @@ import Select from '../select'
 import { useNavigate } from 'react-router-dom';
 import './styles.css'
 
-
 function ArticleForm({ article, error, maidIn, category, onChangeInput, onChangeSelect, onSubmit, onDelete }) {
 
     const navigate = useNavigate()
