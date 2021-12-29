@@ -3,29 +3,29 @@ import StoreModule from "../module";
 class ArticleStore extends StoreModule {
 
   /**
-   * Начальное состояние
-   */
-   initState() {
+  * Начальное состояние
+  */
+  initState() {
     return {
       data: {},
-      formData: {},
+      fields: {
+        title: '',
+        description: '',
+        maidIn: '',
+        category: '',
+        edition: 0,
+        price: 0
+      },
       waiting: true,
       error: ''
     };
   }
 
-  /**
-   * Загрузка списка товаров
-   */
   async load(id) {
-
     this.updateState({
-      data: {},
-      formData: {},
       waiting: true,
-      error: ''
+      data: {}
     });
-
     try {
       const response = await fetch(`/api/v1/articles/${id}?fields=*,maidIn(title,code),category(title)`);
       const json = await response.json();
@@ -33,58 +33,86 @@ class ArticleStore extends StoreModule {
 
       this.updateState({
         data: json.result,
-        formData: json.result,
+        fields: {
+          title: json.result.title,
+          description: json.result.description,
+          maidIn: json.result.maidIn._id,
+          category: json.result.category._id,
+          edition: json.result.edition,
+          price: json.result.price
+        },
         waiting: false
       });
 
     } catch (e) {
       this.updateState({
         data: {},
-        formData: {},
         waiting: false
       });
     }
   }
 
-  async send() {
-    this.updateState({
-      waiting: true,
-      data: this.getState().formData
-    })
-    try {
-      const response = await fetch(`/api/v1/articles/${this.getState().data._id}`, {
-        method: 'PUT',
-        body: JSON.stringify(this.getState().data),
-        headers: { 'Content-Type': 'application/json' }
+  update(name, value, item = null) {
+    if (item) {
+      this.updateState({
+        fields: { ...this.getState().fields, [name]: { ...item } }
       })
-      const json = await response.json()
+    } else {
+      this.updateState({
+        fields: { ...this.getState().fields, [name]: value }
+      })
+    }
+  }
+
+  async send(event) {
+    event.preventDefault();
+
+    const fields = this.getState().fields;
+    const newData = {
+      ...this.getState().data,
+      title: fields.title,
+      description: fields.description,
+      price: fields.price,
+      maidIn: {
+        _id: fields.maidIn
+      },
+      edition: fields.edition,
+      category: {
+        _id: fields.category
+      }
+    }
+
+    this.edit(newData);
+  }
+
+  async edit(data) {
+    this.updateState({
+      error: ' ',
+      waiting: true
+    });
+
+    try {
+      const response = await fetch(`/api/v1/articles/${data._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      const json = await response.json();
       if (json.error) {
         this.updateState({
           error: json.error.message + ': ' + json.error.data.issues[0].path + ' ' + json.error.data.issues[0].message,
         });
         throw new Error(json.error);
       }
-
       this.updateState({
-        waiting: false,
-        error: ''
-      })
-    } catch (e) {
-      this.updateState({
-        waiting: false,
+        data: data
       });
-    } 
-  }
-
-  update(name, value, item = null) {
-    if (item) {
+    } catch (e) {
+    } finally {
       this.updateState({
-        formData: { ...this.getState().formData, [name]: { ...item, title: item.title.replace(/-\s/gm, '') } }
-      })
-    } else {
-      this.updateState({
-        formData: { ...this.getState().formData, [name]: value }
-      })
+        waiting: false
+      });
     }
   }
 
@@ -96,10 +124,10 @@ class ArticleStore extends StoreModule {
     try {
       const response = await fetch(`/api/v1/articles/${this.getState().data._id}`, {
         method: 'DELETE',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
       })
       const json = await response.json();
-      
+
       if (json.error) {
         this.updateState({
           error: json.error.message + ': ' + json.error.data.issues[0].path + ' ' + json.error.data.issues[0].message,

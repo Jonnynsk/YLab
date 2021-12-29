@@ -20,32 +20,33 @@ function ArticleEditing() {
   }, [params.id]);
 
   const select = useSelector(state => ({
-    articleTitle: state.article.data,
-    waiting: state.article.waiting || state.countries.waiting || state.categories.waiting,
-    article: state.article.formData,
-    error: state.article.error,
-    maidIn: state.countries.data,
-    category: state.categories.data
+    article: state.article.data,
+    fields: state.article.fields,
+    countries: state.countries.items,
+    categories: state.categories.items,
+    waiting: state.article.waiting,
+    error: state.article.error
   }));
 
-const callbacks = {
+  const callbacks = {
     onChange: useCallback((name, value) => store.article.update(name, value), [store]),
-    onSubmit: useCallback(() => store.article.send(), [store]),
+    onSubmit: useCallback(event => store.article.send(event), [store]),
     onDelete: useCallback(() => store.article.delete(), [store])
-}
+  }
 
   return (
-    <Layout head={<h1>{select.articleTitle.title}</h1>}>
+    <Layout head={<h1>{select.article.title}</h1>}>
       <Header />
       <Spinner active={select.waiting}>
-        <ArticleForm article={select.article} 
-                     error={select.error}  
-                     maidIn={select.maidIn}  
-                     category={select.category}
-                     onChange={callbacks.onChange}
-                     onSubmit={callbacks.onSubmit}
-                     onDelete={callbacks.onDelete}
-         />
+        <ArticleForm
+          fields={select.fields}
+          countries={select.countries}
+          categories={select.categories}
+          onChange={callbacks.onChange}
+          onSubmit={callbacks.onSubmit}
+          onDelete={callbacks.onDelete}
+          error={select.error}
+        />
       </Spinner>
     </Layout>
   );

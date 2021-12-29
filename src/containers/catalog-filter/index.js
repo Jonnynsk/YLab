@@ -3,8 +3,7 @@ import useSelector from "../../utils/use-selector";
 import useStore from "../../utils/use-store";
 import LayoutTools from "../../components/layout-tools";
 import Input from "../../components/input";
-import SelectCategory from "../../components/selectCategory";
-import SelectBy from "../../components/selectBy";
+import Select from "../../components/select";
 
 function CatalogFilter() {
 
@@ -18,11 +17,12 @@ function CatalogFilter() {
     sort: state.catalog.params.sort,
     query: state.catalog.params.query,
     category: state.catalog.params.category,
-    categories: state.categories.data,
+    categories: state.categories.items,
   }));
 
   // Опции для полей
   const options = {
+    category: useMemo(() => [{value:'', title: 'Все'}].concat(select.categories), [select.categories]),
     sort: useMemo(() => ([
       {value:'key', title: 'По коду'},
       {value:'title.ru', title: 'По именованию'},
@@ -40,10 +40,10 @@ function CatalogFilter() {
 
   return (
     <LayoutTools>
-      <SelectCategory onChange={callbacks.onChangeCategory} value={select.category} categories={select.categories} />
+      <Select onChange={callbacks.onChangeCategory} value={select.category} options={options.category} />
       <Input onChange={callbacks.onSearch} value={select.query} placeholder={'Поиск'} theme="big" delay />
       <label>Сортировка:</label>
-      <SelectBy onChange={callbacks.onSort} value={select.sort} options={options.sort} />
+      <Select onChange={callbacks.onSort} value={select.sort} options={options.sort}/>
       <button onClick={callbacks.onReset}>Сбросить</button>
     </LayoutTools>
   );
