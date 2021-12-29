@@ -76,14 +76,14 @@ class ArticleStore extends StoreModule {
     } 
   }
 
-  update(e, item = null) {
+  update(name, value, item = null) {
     if (item) {
       this.updateState({
-        formData: { ...this.getState().formData, [e.target.name]: { ...item, title: item.title.replace(/-\s/gm, '') } }
+        formData: { ...this.getState().formData, [name]: { ...item, title: item.title.replace(/-\s/gm, '') } }
       })
     } else {
       this.updateState({
-        formData: { ...this.getState().formData, [e.target.name]: e.target.value }
+        formData: { ...this.getState().formData, [name]: value }
       })
     }
   }

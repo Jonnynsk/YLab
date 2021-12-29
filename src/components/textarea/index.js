@@ -29,7 +29,6 @@ function Textarea(props) {
     <textarea
       className={className({theme: props.theme})}
       value={value}
-      type={props.type}
       placeholder={props.placeholder}
       name={props.name}
       onChange={onChange}
@@ -38,8 +37,7 @@ function Textarea(props) {
 }
 
 Textarea.propTypes = {
-  value: propTypes.node,
-  type: propTypes.string,
+  value: propTypes.string,
   placeholder: propTypes.string,
   onChange: propTypes.func,
   theme: propTypes.string,
