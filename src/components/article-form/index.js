@@ -6,16 +6,16 @@ import Select from '../select'
 import { useNavigate } from 'react-router-dom';
 import './styles.css'
 
-function ArticleForm({ article, error, maidIn, category, onChange, onChangeSelect, onSubmit, onDelete }) {
+function ArticleForm({ article, error, maidIn, category, onChange, onSubmit, onDelete }) {
 
     const navigate = useNavigate()
 
-    function onSubmitHandler(e) {
+    const onSubmitHandler = (e) => {
         onSubmit()
         e.preventDefault()
     }
 
-    function onDeleteItem() {
+    const onDeleteHandler = () => {
         onDelete()
         navigate('/');
     }
@@ -75,7 +75,7 @@ function ArticleForm({ article, error, maidIn, category, onChange, onChangeSelec
             </form>
 
             <div className='delete-button'>
-                <button className='delete' onClick={onDeleteItem}>Удалить</button>
+                <button className='delete' onClick={onDeleteHandler}>Удалить</button>
             </div>
 
         </>
