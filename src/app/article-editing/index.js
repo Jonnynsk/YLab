@@ -29,8 +29,8 @@ function ArticleEditing() {
   }));
 
 const callbacks = {
-    onChangeInput: useCallback((e) => store.article.update(e), [store]),
-    onChangeSelect: useCallback((e, item) => store.article.update(e, item), [store]),
+    onChangeInput: useCallback((name, value) => store.article.update(name, value), [store]),
+    onChangeSelect: useCallback((e, item) => store.article.updateSelect(e, item), [store]),
     onSubmit: useCallback(() => store.article.send(), [store]),
     onDelete: useCallback(() => store.article.delete(), [store])
 }
@@ -43,7 +43,7 @@ const callbacks = {
                      error={select.error}  
                      maidIn={select.maidIn}  
                      category={select.category}
-                     onChangeInput={callbacks.onChangeInput}
+                     onChange={callbacks.onChangeInput}
                      onChangeSelect={callbacks.onChangeSelect}
                      onSubmit={callbacks.onSubmit}
                      onDelete={callbacks.onDelete}

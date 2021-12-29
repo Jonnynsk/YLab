@@ -41,7 +41,7 @@ function CatalogFilter() {
   return (
     <LayoutTools>
       <SelectCategory onChange={callbacks.onChangeCategory} value={select.category} categories={select.categories} />
-      <Input onChange={callbacks.onSearch} value={select.query} placeholder={'Поиск'} theme="big" delay />
+      <Input onChange={callbacks.onSearch} value={select.query} placeholder={'Поиск'} theme="big" />
       <label>Сортировка:</label>
       <SelectBy onChange={callbacks.onSort} value={select.sort} options={options.sort} />
       <button onClick={callbacks.onReset}>Сбросить</button>

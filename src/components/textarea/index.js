@@ -5,50 +5,50 @@ import throttle from "lodash.throttle";
 
 function Textarea(props) {
 
- 
   // Внутренний стейт по умолчанию с переданным value
   const [value, change] = useState(props.value);
 
   // Задержка для вызова props.onChange
-  const changeThrottle = props.delay && useCallback(throttle(value => props.onChange(value), 1000), [props.onChange])
+  const changeThrottle = useCallback(throttle(value => props.onChange(value), 1000), [props.onChange]);
 
   // Обработчик изменений в поле
-  const onChange = useCallback(e => {
-    change(e.target.value);
-    props.delay ? changeThrottle(e.target.value) : props.onChange(e)
+  const onChange = useCallback(event => {
+    change(event.target.value);
+    changeThrottle(event.target.value);
   }, [change, changeThrottle]);
+
+  // Обновление стейта, если передан новый value
+  useEffect(() => {
+    change(props.value);
+  }, [props.value]);
 
   // CSS классы по БЭМ
   const className = cn('Textarea');
 
   return (
     <textarea
-      className={className({ theme: props.theme })}
+      className={className({theme: props.theme})}
       value={value}
       type={props.type}
       placeholder={props.placeholder}
+      name={props.name}
       onChange={onChange}
-      name={props.name || props.placeholder}
     />
   )
 }
 
 Textarea.propTypes = {
-  value: propTypes.oneOfType([propTypes.string, propTypes.number]),
+  value: propTypes.node,
   type: propTypes.string,
   placeholder: propTypes.string,
-  name: propTypes.string,
   onChange: propTypes.func,
   theme: propTypes.string,
-  delay: propTypes.bool
 }
 
 Textarea.defaultProps = {
-  onChange: () => { },
+  onChange: () => {},
   type: 'text',
-  theme: '',
-  delay: false
+  theme: ''
 }
-
 
 export default React.memo(Textarea);
