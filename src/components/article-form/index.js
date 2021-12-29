@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import Input from '../input'
 import Textarea from '../textarea'
 import LayoutEdit from '../layout-edit'
@@ -6,7 +6,7 @@ import Select from '../select'
 import { useNavigate } from 'react-router-dom';
 import './styles.css'
 
-function ArticleForm({ article, error, maidIn, category, onChange, onChangeSelect, onSubmit, onDelete }) {
+function ArticleForm({ article, error, maidIn, category, onChangeInput, onChangeSelect, onSubmit, onDelete }) {
 
     const navigate = useNavigate()
 
@@ -20,24 +20,22 @@ function ArticleForm({ article, error, maidIn, category, onChange, onChangeSelec
         navigate('/');
     }
 
-    const onChangeHandler = useCallback((name) => {
-        return (value) => onChange(name, value);
-      }, [onChange]);
-
     return (
         <>
             <form className='editing' onSubmit={onSubmitHandler}>
 
                 <LayoutEdit label='Название'>
-                    <Input type='text'
+                    <Input type='text' 
+                           name='title' 
                            value={article.title} 
-                           onChange={onChangeHandler('title')}
+                           onChange={onChangeInput} 
                            placeholder='название' />
                 </LayoutEdit>
                 <LayoutEdit label='Описание'>
                     <Textarea type='text' 
+                              name='description' 
                               value={article.description} 
-                              onChange={onChangeHandler('description')}
+                              onChange={onChangeInput} 
                               placeholder='Описание товара' />
                 </LayoutEdit>
                 <LayoutEdit label='Страна производитель'>
@@ -54,14 +52,16 @@ function ArticleForm({ article, error, maidIn, category, onChange, onChangeSelec
                 </LayoutEdit>
                 <LayoutEdit label='Год выпуска'>
                     <Input type='number' 
+                           name='edition' 
                            value={article.edition} 
-                           onChange={onChangeHandler('edition')} 
+                           onChange={onChangeInput} 
                            placeholder='Год выпуска' />
                 </LayoutEdit>
                 <LayoutEdit label='Цена (₽)'>
                     <Input type='number' 
+                           name='price' 
                            value={article.price} 
-                           onChange={onChangeHandler('price')} 
+                           onChange={onChangeInput} 
                            placeholder='Цена' />
                 </LayoutEdit>
 

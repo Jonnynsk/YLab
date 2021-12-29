@@ -8,14 +8,7 @@ class ArticleStore extends StoreModule {
    initState() {
     return {
       data: {},
-      formData: {
-        title: '',
-        description: '',
-        maidIn: '',
-        category: '',
-        edition: 0,
-        price: 0
-      },
+      formData: {},
       waiting: true,
       error: ''
     };
@@ -83,7 +76,7 @@ class ArticleStore extends StoreModule {
     } 
   }
 
-  updateSelect(e, item = null) {
+  update(e, item = null) {
     if (item) {
       this.updateState({
         formData: { ...this.getState().formData, [e.target.name]: { ...item, title: item.title.replace(/-\s/gm, '') } }
@@ -93,16 +86,6 @@ class ArticleStore extends StoreModule {
         formData: { ...this.getState().formData, [e.target.name]: e.target.value }
       })
     }
-  }
-
-  update(name, value){
-    const newFields = {
-      ...this.getState().formData,
-      [name] : value
-    }
-    this.updateState({
-      formData: newFields,
-    });
   }
 
   async delete() {
